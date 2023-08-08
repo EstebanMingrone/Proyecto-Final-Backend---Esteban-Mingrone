@@ -1,0 +1,16 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+header{
+    background-color:#D9A282;
+    color:#527970;
+    font-family: "Montserrat";
+    text-align: center;
+    padding: 20px;
+    font-size: 30px;
+}
