@@ -1,4 +1,5 @@
 import express from 'express';
+import { io } from '../app';
 import fs from 'fs/promises';
 
 const cart = express.Router();
@@ -9,6 +10,7 @@ cart.post('/', async (req, res) => {
     newCart.id = await newCartID();
     newCart.products = [];
     await saveCart(newCart);
+    io.emit('updateCart');
     res.json(newCart);
 });
 
@@ -33,6 +35,7 @@ cart.post('/:cid/product/:pid', async (req, res) => {
         cart.products.push({id: productID, quantity: 1});
     }
     await saveCart(cart)
+    io.emit('updateCart')
     res.json(cart)
 });
 

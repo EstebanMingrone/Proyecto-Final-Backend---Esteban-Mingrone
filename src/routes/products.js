@@ -1,4 +1,5 @@
 import express from 'express';
+import { io } from '../app';
 import fs from 'fs/promises';
 
 const products = express.Router();
@@ -28,6 +29,7 @@ products.post('/', async (req,res)=>{
     newProduct.id = newID(products);
     products.push(newProduct)
     await saveProducts(products)
+    io.emit('updateProducts')
     res.json(newProduct)
 })
 
@@ -39,6 +41,7 @@ products.put('/:pid', async (req, res)=>{
     if (productIndex !== -1){
         products[productIndex] = {...products[productIndex], ...updatedFields}
         await saveProducts(products)
+        io.emit('updateProducts')
         res.json(products[productIndex])
     } else{
         res.status(404).json({error: 'No se encuentra el producto'})
@@ -51,6 +54,7 @@ products.delete('/:pid', async (req,res)=>{
     const updatedProducts= products.filter(product => product.id !== productID);
     if (products.length !== updatedProducts.length){
         await saveProducts(updatedProducts)
+        io.emit('updateProducts')
         res.json({message: 'Producto eliminado con éxito'})
     } else{
         res.status(404).json({error: 'No se encuentra el producto'})
